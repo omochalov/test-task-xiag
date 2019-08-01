@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node src/bin/www",
     "eslint": "./node_modules/eslint/bin/eslint.js src",
-    "eslint-fix": "./node_modules/eslint/bin/eslint.js src --fix"
+    "eslint-fix": "./node_modules/eslint/bin/eslint.js src --fix",
+    "db-init": "NODE_ENV=dbinit node src/database/init"
   },
   "repository": {
     "type": "git",
