@@ -2,16 +2,15 @@ const serverConfig = require('config').server;
 const http = require('http');
 const Logger = require('js-logger');
 const router = require('../utils/router');
-const responder = require('../utils/responder');
-
-const HTTP_METHODS = require('../consts/httpMethods');
 
 const { port } = serverConfig;
 
 Logger.useDefaults();
 
-router.register('/', HTTP_METHODS.GET, (req, res) => {
-  responder.okResponse(res, { hello: 'world' });
+// require routes
+require('require-all')({
+  dirname: `${__dirname}/../routes`,
+  recursive: true,
 });
 
 const server = http.createServer((req, res) => {

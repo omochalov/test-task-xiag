@@ -20,7 +20,8 @@
   "homepage": "https://github.com/omochalov/test-task-xiag#readme",
   "dependencies": {
     "config": "^3.2.2",
-    "js-logger": "^1.6.0"
+    "js-logger": "^1.6.0",
+    "require-all": "^3.0.0"
   },
   "devDependencies": {
     "eslint": "^5.16.0",
