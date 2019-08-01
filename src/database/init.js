@@ -5,6 +5,15 @@ logger.useDefaults();
 
 const init = async () => {
   try {
+    logger.info('Let\'s try to drop old database and user...');
+    await dbQuery.executeQuery('DROP DATABASE "app"');
+    await dbQuery.executeQuery('DROP USER IF EXISTS dbuser');
+    logger.info('Success.');
+  } catch (err) {
+    return logger.error(`An error occurred while dropping database or user: ${err}`);
+  }
+
+  try {
     logger.info('Create user and database...');
     await dbQuery.executeQuery('CREATE DATABASE "app"');
     await dbQuery.executeQuery('CREATE USER dbuser WITH ENCRYPTED PASSWORD \'test\'');
