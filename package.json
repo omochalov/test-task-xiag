@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "eslint": "./node_modules/eslint/bin/eslint.js src",
+    "eslint-fix": "./node_modules/eslint/bin/eslint.js src --fix"
   },
   "repository": {
     "type": "git",
@@ -16,6 +17,10 @@
     "url": "https://github.com/omochalov/test-task-xiag/issues"
   },
   "homepage": "https://github.com/omochalov/test-task-xiag#readme",
-  "dependencies": {
+  "dependencies": {},
+  "devDependencies": {
+    "eslint": "^6.1.0",
+    "eslint-config-airbnb-base": "^13.2.0",
+    "eslint-plugin-import": "^2.18.2"
   }
 }
