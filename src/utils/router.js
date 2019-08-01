@@ -1,12 +1,16 @@
 const parser = require('url');
 const responder = require('../utils/responder');
 
-const handlers = {};
+let handlers = {};
 
 const register = (url, method, callback) => {
   if (!handlers[url]) handlers[url] = {};
   handlers[url][method.toLowerCase()] = callback;
 };
+
+const getHandlers = () => handlers;
+
+const clear = () => { handlers = {}; };
 
 const notFound = (req, res) => {
   const url = parser.parse(req.url, true);
@@ -23,6 +27,8 @@ const route = (req, res) => {
 
 module.exports = {
   register,
+  getHandlers,
+  clear,
   route,
   notFound,
 };
