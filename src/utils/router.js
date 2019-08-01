@@ -1,6 +1,5 @@
 const parser = require('url');
-const STATUS_CODES = require('../consts/statusCodes');
-const CONTENT_TYPES = require('../consts/contentTypes');
+const responder = require('../utils/responder');
 
 const handlers = {};
 
@@ -11,8 +10,7 @@ const register = (url, method, callback) => {
 
 const notFound = (req, res) => {
   const url = parser.parse(req.url, true);
-  res.writeHead(STATUS_CODES.NOT_FOUND, CONTENT_TYPES.JSON);
-  res.end(JSON.stringify({ error: `Not found: ${url.pathname}` }));
+  responder.notFoundResponse(res, url);
 };
 
 const route = (req, res) => {
