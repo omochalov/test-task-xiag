@@ -13,11 +13,15 @@ require('require-all')({
   recursive: true,
 });
 
-const server = http.createServer((req, res) => {
-  router.route(req, res);
+const server = http.createServer(async (req, res) => {
+  await router.route(req, res);
 });
 
 server.listen(port, (err) => {
   if (err) return Logger.error('something bad happened', err);
   Logger.info(`server is listening on ${port}`);
 });
+
+module.exports = {
+  stop: () => { Logger.info('Stopping server...'); server.close(); },
+};
