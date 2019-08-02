@@ -10,7 +10,7 @@ const createTables = async () => {
     await dbQuery.executeQuery('DROP TABLE IF EXISTS tests;');
     logger.info('Success.');
   } catch (err) {
-    return logger.error(`An error occurred while dropping tables: ${err}`);
+    logger.error(`An error occurred while dropping tables: ${err}`);
   }
 
   try {
@@ -42,7 +42,7 @@ const createTables = async () => {
 
     return logger.info('Tables created');
   } catch (err) {
-    return logger.error(`An error occurred while creating tables: ${err}`);
+    logger.error(`An error occurred while creating tables: ${err}`);
   }
 };
 

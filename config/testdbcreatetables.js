@@ -1,12 +1,9 @@
 module.exports = {
-  server: {
-    port: '3000',
-  },
   db: {
     host: 'localhost',
     port: 8080,
+    user: 'testdbuser',
     password: 'test',
-    user: 'dbuser',
-    database: 'app',
+    database: 'testapp',
   },
 };

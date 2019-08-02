@@ -5,7 +5,7 @@ module.exports = {
     user: 'postgres',
     password: 'test',
     database: 'postgres',
-    createdDatabaseName: 'app',
-    createdUserName: 'dbUser',
+    createdDatabaseName: 'testapp',
+    createdUserName: 'testdbuser',
   },
 };
