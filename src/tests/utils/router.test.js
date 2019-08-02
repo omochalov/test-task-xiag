@@ -11,7 +11,7 @@ describe('Router', () => {
     it('Should register new callback', () => {
       const callback = () => {};
       router.register('/', 'POST', callback);
-      expect(router.getHandlers()).to.be.deep.equal({ '/': { post: callback } });
+      expect(router.getHandlers()).to.be.deep.equal({ '/': { post: [callback] } });
     });
   });
 
@@ -22,14 +22,14 @@ describe('Router', () => {
 
     it('Should call correct handler', () => {
       const testAnswer = 'test';
-      const callback = () => testAnswer;
+      const callback = (req, res) => { res.a = testAnswer; };
       router.register('/', 'get', callback);
 
       const req = { url: '/', method: 'GET' };
       const res = {};
 
-      const handlerResult = router.route(req, res);
-      expect(testAnswer).to.be.equals(handlerResult);
+      router.route(req, res);
+      expect(res.a).to.be.equals(testAnswer);
     });
 
     it('Should set 404 status code and return error for undefined route', () => {

@@ -3,9 +3,9 @@ const responder = require('../utils/responder');
 
 let handlers = {};
 
-const register = (url, method, callback) => {
+const register = (url, method, ...callbacks) => {
   if (!handlers[url]) handlers[url] = {};
-  handlers[url][method.toLowerCase()] = callback;
+  handlers[url][method.toLowerCase()] = callbacks;
 };
 
 const getHandlers = () => handlers;
@@ -17,12 +17,12 @@ const notFound = (req, res) => {
   responder.notFoundResponse(res, url);
 };
 
-const route = (req, res) => {
+const route = async (req, res) => {
   const url = parser.parse(req.url, true);
   const { method } = req;
   const handler = handlers[url.pathname] ? handlers[url.pathname][method.toLowerCase()] : null;
   if (!handler) return notFound(req, res);
-  return handler(req, res);
+  await handler.map(c => c(req, res));
 };
 
 module.exports = {
