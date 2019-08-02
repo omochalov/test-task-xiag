@@ -11,6 +11,11 @@ const notFoundResponse = (res, url) => {
   return baseJsonResponse(res, { error: `Not found: ${url.pathname}` });
 };
 
+const badRequest = (res, obj) => {
+  res.writeHead(STATUS_CODES.BAD, CONTENT_TYPES.JSON);
+  return baseJsonResponse(res, obj);
+};
+
 const okResponse = (res, obj) => {
   res.writeHead(STATUS_CODES.OK, CONTENT_TYPES.JSON);
   return baseJsonResponse(res, obj);
@@ -19,4 +24,5 @@ const okResponse = (res, obj) => {
 module.exports = {
   notFoundResponse,
   okResponse,
+  badRequest,
 };
