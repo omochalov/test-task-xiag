@@ -18,7 +18,7 @@ router.register('/test', HTTP_METHODS.GET,
     if (!link) return responder.badResponse(res, { error: 'link must be in parameters' });
 
     const test = await testService.findWithQuestionsByLink(link);
-    if (!test) return responder.badResponse(res, { error: `not found test with link: ${link}` });
+    if (!test) return responder.notFoundResponse(res, req.url);
 
     const { user } = req;
     const didPastTest = await userService.didPassTest(user.id, test.id);

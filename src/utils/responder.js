@@ -3,6 +3,7 @@ const CONTENT_TYPES = require('../consts/contentTypes');
 
 const baseJsonResponse = (res, obj) => {
   if (typeof obj === 'string') return res.end(obj);
+  res.needContinue = false;
   return res.end(JSON.stringify(obj));
 };
 

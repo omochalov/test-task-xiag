@@ -22,7 +22,10 @@ const route = async (req, res) => {
   const { method } = req;
   const handler = handlers[url.pathname] ? handlers[url.pathname][method.toLowerCase()] : null;
   if (!handler) return notFound(req, res);
-  await handler.map(c => c(req, res));
+  for (let i = 0; i < handler.length; i += 1) {
+    await handler[i](req, res);
+    if (res.needContinue === false) break;
+  }
 };
 
 module.exports = {

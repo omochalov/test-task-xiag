@@ -7,12 +7,12 @@ const findByLink = async (link) => {
 };
 
 const findById = async (id) => {
-  const result = await dbQuery.executeQuery('SELECT * FROM tests WHERE id = $1::text', [id]);
+  const result = await dbQuery.executeQuery('SELECT * FROM tests WHERE id = $1::bigint', [id]);
   return result.rows[0] ? result.rows[0] : null;
 };
 
 const findQuestionById = async (id) => {
-  const result = await dbQuery.executeQuery('SELECT * FROM questions WHERE id = $1::text', [id]);
+  const result = await dbQuery.executeQuery('SELECT * FROM questions WHERE id = $1::bigint', [id]);
   return result.rows[0] ? result.rows[0] : null;
 };
 
