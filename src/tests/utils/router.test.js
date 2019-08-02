@@ -4,6 +4,10 @@ const router = require('../../utils/router');
 
 describe('Router', () => {
   describe('#register()', () => {
+    beforeEach(() => {
+      router.clear();
+    });
+
     afterEach(() => {
       router.clear();
     });

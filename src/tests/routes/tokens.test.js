@@ -2,9 +2,9 @@
 const { expect } = require('chai');
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const server = require('../../bin/www');
+require('../../bin/www');
 const userService = require('../../services/userService');
-const router = require('../../utils/router');
+require('../../utils/router');
 const dbQuery = require('../../database/dbQuery');
 
 chai.use(chaiHttp);
@@ -13,8 +13,6 @@ chai.use(chaiHttp);
 describe('Tokens router', () => {
   after(async () => {
     await dbQuery.executeQuery('DELETE FROM users');
-    router.clear();
-    server.stop();
   });
 
   describe('#GET ()', async () => {

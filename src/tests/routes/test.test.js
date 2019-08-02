@@ -3,8 +3,7 @@ const { expect } = require('chai');
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const randomstring = require('randomstring');
-const server = require('../../bin/www');
-const router = require('../../utils/router');
+require('../../bin/www');
 const dbQuery = require('../../database/dbQuery');
 const tokenGenerator = require('../../utils/tokenGenerator');
 const linkGenerator = require('../../utils/linkGenerator');
@@ -12,12 +11,7 @@ const linkGenerator = require('../../utils/linkGenerator');
 chai.use(chaiHttp);
 
 
-describe.only('Tests router', () => {
-  after(async () => {
-    router.clear();
-    server.stop();
-  });
-
+describe('Tests router', () => {
   describe('#GET test/', async () => {
     const userToken = tokenGenerator.generate();
 
