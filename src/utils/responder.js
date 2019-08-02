@@ -8,7 +8,7 @@ const baseJsonResponse = (res, obj) => {
 
 const notFoundResponse = (res, url) => {
   res.writeHead(STATUS_CODES.NOT_FOUND, CONTENT_TYPES.JSON);
-  res.end(JSON.stringify({ error: `Not found: ${url.pathname}` }));
+  return baseJsonResponse(res, { error: `Not found: ${url.pathname}` });
 };
 
 const okResponse = (res, obj) => {
