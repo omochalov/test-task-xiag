@@ -1,4 +1,4 @@
-const bodyParser = async (req, res, next) => {
+const bodyParser = async (req, res) => new Promise((resolve, reject) => {
   let body = '';
 
   req.on('data', (data) => {
@@ -9,8 +9,8 @@ const bodyParser = async (req, res, next) => {
 
   req.on('end', () => {
     req.body = JSON.parse(body);
-    next(req, res);
+    resolve();
   });
-};
+});
 
 module.exports = bodyParser;

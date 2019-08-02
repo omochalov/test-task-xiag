@@ -27,11 +27,10 @@ router.register('/test', HTTP_METHODS.GET,
   });
 
 router.register('/test', HTTP_METHODS.POST,
-  (req, res) => {
-    bodyParser(req, res, async (req, res) => {
-      const test = await testService.create(req.body);
-      responder.okResponse(res, { link: test.link });
-    });
+  bodyParser,
+  async (req, res) => {
+    const test = await testService.create(req.body);
+    responder.okResponse(res, { link: test.link });
   });
 
 router.register('/test/result', HTTP_METHODS.GET,
