@@ -32,7 +32,7 @@ describe('Router', () => {
       expect(testAnswer).to.be.equals(handlerResult);
     });
 
-    it('Should call notFound for undefined route', () => {
+    it('Should set 404 status code and return error for undefined route', () => {
       const req = { url: '/undefined-route', method: 'undefined-method' };
       // sorry, no time for correct stubbing
       const res = { writeHead: sinon.spy(), end: sinon.spy() };
