@@ -17,6 +17,8 @@
     },
     "rules": {
         "consistent-return": "off",
-        "no-shadow": "off"
+        "no-shadow": "off",
+        "no-restricted-syntax": "off",
+        "no-await-in-loop": "off"
     }
 }

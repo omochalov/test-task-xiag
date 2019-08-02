@@ -10,7 +10,14 @@ const create = async (token) => {
   return findByToken(token);
 };
 
+const didPassTest = async (userId, testId) => {
+  const result = await dbQuery.executeQuery('SELECT * FROM user_names_to_tests WHERE user_id = $1::bigint AND test_id = $1::bigint',
+    [userId, testId]);
+  return !!result.rows.length;
+};
+
 module.exports = {
   create,
   findByToken,
+  didPassTest,
 };
