@@ -52,12 +52,12 @@ describe('Tests router', () => {
               text: questionText,
               answers: [
                 {
-                  answerId: '1',
-                  answerText: firstAnswerText,
+                  id: '1',
+                  text: firstAnswerText,
                 },
                 {
-                  answerId: '2',
-                  answerText: secondAnswerText,
+                  id: '2',
+                  text: secondAnswerText,
                 },
               ],
             },
@@ -196,6 +196,78 @@ describe('Tests router', () => {
       const res = await chai.request('http://localhost:3000')
         .get('/test/result')
         .query({ testId: 1 });
+      expect(res.statusCode).to.be.equals(400);
+    });
+  });
+
+  describe('#POST /test/answer', async () => {
+    const link = linkGenerator.generate();
+    const questionText = randomstring.generate();
+    const firstAnswerText = randomstring.generate();
+    const secondAnswerText = randomstring.generate();
+
+    const userToken = tokenGenerator.generate();
+    const userName = randomstring.generate();
+
+    before(async () => {
+      await dbQuery.executeQuery('INSERT INTO tests VALUES(1, $1::text)', [link]);
+
+      await dbQuery.executeQuery('INSERT INTO questions VALUES(1, 1, $1::text)', [questionText]);
+
+      await dbQuery.executeQuery('INSERT INTO possible_answers VALUES(1, 1, $1::text)', [firstAnswerText]);
+      await dbQuery.executeQuery('INSERT INTO possible_answers VALUES(2, 1, $1::text)', [secondAnswerText]);
+
+      await dbQuery.executeQuery('INSERT INTO users VALUES(1, $1::text)', [userToken]);
+    });
+
+    after(async () => {
+      await dbQuery.executeQuery('DELETE FROM tests');
+      await dbQuery.executeQuery('DELETE FROM users');
+    });
+
+    it('Should save test\'s answers', async () => {
+      const res = await chai.request('http://localhost:3000')
+        .post('/test/answer')
+        .set('token', userToken)
+        .send({ testId: 1, userName, answers: [{ questionId: 1, answerId: 2 }] });
+
+      expect(res.statusCode).to.be.equals(200);
+
+      const nameToTest = await dbQuery.executeQuery('SELECT * FROM user_names_to_tests WHERE name = $1::text AND test_id = 1', [userName]);
+      expect(nameToTest).to.exist;
+
+      const answer = await dbQuery.executeQuery('SELECT * FROM user_answers WHERE answer_id = 2 AND question_id = 1');
+      expect(answer).to.exist;
+    });
+
+    it('Should reject when token is not set', async () => {
+      const res = await chai.request('http://localhost:3000')
+        .post('/test/answer')
+        .send({ testId: 1, userName, answers: [{ questionId: 1, answerId: 2 }] });
+      expect(res.statusCode).to.be.equals(400);
+    });
+
+    it('Should reject when testId is not provided', async () => {
+      const res = await chai.request('http://localhost:3000')
+        .post('/test/answer')
+        .set('token', userToken)
+        .send({ userName, answers: [{ questionId: 1, answerId: 2 }] });
+      expect(res.statusCode).to.be.equals(400);
+    });
+
+    it('Should reject when userName is not provided', async () => {
+      const res = await chai.request('http://localhost:3000')
+        .post('/test/answer')
+        .set('token', userToken)
+        .send({ testId: 1, answers: [{ questionId: 1, answerId: 2 }] });
+      expect(res.statusCode).to.be.equals(400);
+    });
+    
+    it('Should reject when answerId-questionId pain is incorrect', async () => {
+      const res = await chai.request('http://localhost:3000')
+        .post('/test/answer')
+        .set('token', userToken)
+        .send({ testId: 1, userName, answers: [{ questionId: 50, answerId: 2 }] });
       expect(res.statusCode).to.be.equals(400);
     });
   });

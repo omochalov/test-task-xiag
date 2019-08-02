@@ -51,8 +51,8 @@ describe('TestService', () => {
         questions: {
           1: {
             text: questionText,
-            answers: [{ answerId: '1', answerText: firstAnswerText },
-              { answerId: '2', answerText: secondAnswerText }],
+            answers: [{ id: '1', text: firstAnswerText },
+              { id: '2', text: secondAnswerText }],
           },
         },
       };
@@ -139,6 +139,45 @@ describe('TestService', () => {
       };
 
       expect(JSON.stringify(testResults)).to.be.equals(JSON.stringify(expectedAnswer));
+    });
+  });
+
+  describe('#saveAnswers', () => {
+    const link = linkGenerator.generate();
+    const questionText = randomstring.generate();
+    const firstAnswerText = randomstring.generate();
+    const secondAnswerText = randomstring.generate();
+
+    const userToken = tokenGenerator.generate();
+    const userName = randomstring.generate();
+
+    before(async () => {
+      await dbQuery.executeQuery('INSERT INTO tests VALUES(1, $1::text)', [link]);
+
+      await dbQuery.executeQuery('INSERT INTO questions VALUES(1, 1, $1::text)', [questionText]);
+
+      await dbQuery.executeQuery('INSERT INTO possible_answers VALUES(1, 1, $1::text)', [firstAnswerText]);
+      await dbQuery.executeQuery('INSERT INTO possible_answers VALUES(2, 1, $1::text)', [secondAnswerText]);
+
+      await dbQuery.executeQuery('INSERT INTO users VALUES(1, $1::text)', [userToken]);
+    });
+
+    after(async () => {
+      await dbQuery.executeQuery('DELETE FROM tests');
+      await dbQuery.executeQuery('DELETE FROM users');
+    });
+
+    it('Should save user\'s answers', async () => {
+      await testService.saveAnswers(1, 1, userName, [{
+        questionId: 1,
+        answerId: 2,
+      }]);
+
+      const nameToTest = await dbQuery.executeQuery('SELECT * FROM user_names_to_tests WHERE name = $1::text AND test_id = 1', [userName]);
+      expect(nameToTest).to.exist;
+
+      const answer = await dbQuery.executeQuery('SELECT * FROM user_answers WHERE answer_id = 2 AND question_id = 1');
+      expect(answer).to.exist;
     });
   });
 });

@@ -16,7 +16,7 @@ const findQuestionById = async (id) => {
   return result.rows[0] ? result.rows[0] : null;
 };
 
-const findWithQuestionsByLink = async (link) => {
+const findWithQuestionById = async (id) => {
   const result = await dbQuery.executeQuery(`SELECT q.id as "questionId" , 
                                                           q.text as "questionText",
                                                           pa.id as "answerId", 
@@ -25,8 +25,8 @@ const findWithQuestionsByLink = async (link) => {
                                                     FROM tests as t
                                                     LEFT JOIN questions as q ON t.id = q.test_id
                                                     LEFT JOIN possible_answers as pa ON q.id = pa.question_id
-                                                    WHERE t.link = $1::text
-                                                    ORDER BY q.id`, [link]);
+                                                    WHERE t.id = $1::bigint
+                                                    ORDER BY q.id`, [id]);
 
   const transformResults = (array) => {
     const result = {};
@@ -42,8 +42,8 @@ const findWithQuestionsByLink = async (link) => {
       }
 
       questions[elem.questionId].answers.push({
-        answerId: elem.answerId,
-        answerText: elem.answerText,
+        id: elem.answerId,
+        text: elem.answerText,
       });
     });
 
@@ -51,6 +51,11 @@ const findWithQuestionsByLink = async (link) => {
   };
 
   return result.rows.length !== 0 ? transformResults(result.rows) : null;
+};
+
+const findWithQuestionsByLink = async (link) => {
+  const test = await findByLink(link);
+  return test ? findWithQuestionById(test.id) : null;
 };
 
 const getResultsOfQuestionById = async (id, questionId) => {
@@ -111,11 +116,27 @@ const create = async (questions) => {
     }
   }
 
-  return findByLink(link);
+  return findById(testId);
+};
+
+const saveAnswers = async (testId, userId, userName, answers) => {
+  await dbQuery.executeQuery('INSERT INTO user_names_to_tests VALUES ($1::bigint, $2::bigint, $3::text)', [userId, testId, userName]);
+
+  const promises = [];
+  answers.forEach((answer) => {
+    const { questionId, answerId } = answer;
+
+    promises.push(dbQuery.executeQuery('INSERT INTO user_answers VALUES (DEFAULT, $1::bigint, $2::bigint, $3::bigint)',
+      [questionId, answerId, userId]));
+  });
+
+  await Promise.all(promises);
 };
 
 module.exports = {
   create,
+  saveAnswers,
+  findWithQuestionById,
   findWithQuestionsByLink,
   findByLink,
   findById,

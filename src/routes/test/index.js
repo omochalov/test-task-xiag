@@ -51,3 +51,37 @@ router.register('/test/result', HTTP_METHODS.GET,
     const questionResult = await testService.getResultsOfQuestionById(testId, questionId);
     responder.okResponse(res, questionResult);
   });
+
+router.register('/test/answer', HTTP_METHODS.POST,
+  checkToken,
+  bodyParser,
+  async (req, res) => {
+    if (!req.body.testId) return responder.badResponse(res, { error: 'testId must be in body' });
+    if (await userService.didPassTest(req.user.id, req.body.testId)) return responder.badResponse(res, { error: 'User passed this test before' });
+
+    if (!req.body.userName) return responder.badResponse(res, { error: 'userName must be in body' });
+
+    const test = await testService.findWithQuestionById(req.body.testId);
+    if (!test) return responder.badResponse(res, { error: `not found test with id: ${req.body.testId}` });
+
+    const { answers } = req.body;
+    if (!answers) return responder.badResponse(res, { error: 'not found answers in body' });
+
+    const { questions } = test;
+    answers.forEach((answer) => {
+      const { questionId, answerId } = answer;
+
+      const question = questions[questionId];
+      if (!question) return responder.badResponse(res, { error: `not found question with id ${questionId} in test` });
+
+      if (!question.answers.map(a => a.id).includes(`${answerId}`)) {
+        responder.badResponse(res, { error: `not found answer with id ${answerId} for question with id ${questionId}` });
+      }
+    });
+
+    await testService.saveAnswers(req.body.testId,
+      req.user.id,
+      req.body.userName,
+      answers);
+    responder.okResponse(res, {});
+  });
