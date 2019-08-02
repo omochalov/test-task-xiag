@@ -6,9 +6,11 @@ const bodyParser = async (req, res) => new Promise((resolve, reject) => {
   req.on('data', (data) => {
     body += data;
 
-    if (body.length > 1e6) req.connection.destroy();
-    responder.badResponse(res, { error: 'Too long data' });
-    reject();
+    if (body.length > 1e6) {
+      req.connection.destroy();
+      responder.badResponse(res, { error: 'Too long data' });
+      reject();
+    }
   });
 
   req.on('end', () => {
