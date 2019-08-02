@@ -1,4 +1,4 @@
-const bodyParser = async (req, res) => new Promise((resolve, reject) => {
+const bodyParser = async req => new Promise((resolve) => {
   let body = '';
 
   req.on('data', (data) => {
