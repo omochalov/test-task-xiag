@@ -262,7 +262,7 @@ describe('Tests router', () => {
         .send({ testId: 1, answers: [{ questionId: 1, answerId: 2 }] });
       expect(res.statusCode).to.be.equals(400);
     });
-    
+
     it('Should reject when answerId-questionId pain is incorrect', async () => {
       const res = await chai.request('http://localhost:3000')
         .post('/test/answer')

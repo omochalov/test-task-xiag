@@ -4,7 +4,6 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 require('../../bin/www');
 const userService = require('../../services/userService');
-require('../../utils/router');
 const dbQuery = require('../../database/dbQuery');
 
 chai.use(chaiHttp);
