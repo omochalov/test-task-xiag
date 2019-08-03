@@ -130,6 +130,22 @@ describe('Tests router', () => {
       const answers = (await dbQuery.executeQuery('SELECT * FROM possible_answers')).rows;
       expect(answers.length).to.be.equals(2);
     });
+
+    it('Should reject when questions not provided', async () => {
+      const res = await chai.request('http://localhost:3000')
+        .post('/test')
+        .set('Content-Type', 'application/json')
+        .send({});
+      expect(res.statusCode).to.be.equals(400);
+    });
+
+    it('Should reject when questions has incorrect format', async () => {
+      const res = await chai.request('http://localhost:3000')
+        .get('/test')
+        .set('token', randomstring.generate())
+        .query({ question: { a: 1, b: 2 } });
+      expect(res.statusCode).to.be.equals(400);
+    });
   });
 
   describe('#GET /test/resuls', async () => {
