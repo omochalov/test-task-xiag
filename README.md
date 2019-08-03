@@ -11,9 +11,9 @@
 - `npm run db-init`
 
 ## How to run application
-- Deploy database
+- Deploy database, install dependencies
 - `npm start`
 
 ## How to run tests
-- Deploy database
+- Deploy database, install dependencies
 - `npm run test`
