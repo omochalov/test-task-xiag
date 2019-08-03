@@ -1,0 +1,6 @@
+{
+  "OK": 200,
+  "BAD": 400,
+  "NOT_FOUND": 404,
+  "UNRESOLVED_ERROR": 500
+}

@@ -1,0 +1,40 @@
+{
+  "name": "test-task-xiag",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/bin/www",
+    "eslint": "./node_modules/eslint/bin/eslint.js src",
+    "eslint-fix": "./node_modules/eslint/bin/eslint.js src --fix",
+    "db-init": "NODE_ENV=dbinit node src/database/init && NODE_ENV=dbcreatetables node src/database/createTables",
+    "test": "NODE_ENV=testdbinit node src/database/init && NODE_ENV=testdbcreatetables node src/database/createTables && NODE_ENV=test mocha \"src/tests/**/*.test.js\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/omochalov/test-task-xiag.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/omochalov/test-task-xiag/issues"
+  },
+  "homepage": "https://github.com/omochalov/test-task-xiag#readme",
+  "dependencies": {
+    "config": "^3.2.2",
+    "js-logger": "^1.6.0",
+    "pg": "^7.12.0",
+    "randomstring": "^1.1.5",
+    "require-all": "^3.0.0",
+    "uuidv4": "^4.0.0"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^13.2.0",
+    "eslint-plugin-import": "^2.18.2",
+    "mocha": "^6.2.0",
+    "sinon": "^7.3.2"
+  }
+}
