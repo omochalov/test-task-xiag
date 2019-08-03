@@ -24,8 +24,15 @@ const okResponse = (res, obj) => {
   return baseJsonResponse(res, obj);
 };
 
+const unhandledErrorResponse = (res) => {
+  res.writeHead(STATUS_CODES.UNRESOLVED_ERROR, CONTENT_TYPES.JSON);
+  res.needContinue = false;
+  return baseJsonResponse(res, { error: 'unexpected error' });
+};
+
 module.exports = {
   notFoundResponse,
   okResponse,
   badResponse,
+  unhandledErrorResponse,
 };
