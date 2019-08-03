@@ -22,6 +22,10 @@ server.listen(port, (err) => {
   Logger.info(`server is listening on ${port}`);
 });
 
+const stop = () => new Promise((res) => {
+  Logger.info('Stopping server...'); server.close(() => { Logger.info('Server stopped'); res(); });
+});
+
 module.exports = {
-  stop: () => new Promise((res) => { Logger.info('Stopping server...'); server.close(() => { Logger.info('Server stopped'); res(); }); }),
+  stop,
 };

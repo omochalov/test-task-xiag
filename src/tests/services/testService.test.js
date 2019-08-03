@@ -173,7 +173,8 @@ describe('TestService', () => {
         answerId: 2,
       }]);
 
-      const nameToTest = await dbQuery.executeQuery('SELECT * FROM user_names_to_tests WHERE name = $1::text AND test_id = 1', [userName]);
+      const nameToTest = await dbQuery
+        .executeQuery('SELECT * FROM user_names_to_tests WHERE name = $1::text AND test_id = 1', [userName]);
       expect(nameToTest).to.exist;
 
       const answer = await dbQuery.executeQuery('SELECT * FROM user_answers WHERE answer_id = 2 AND question_id = 1');

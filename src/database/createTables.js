@@ -34,10 +34,11 @@ const createTables = async () => {
                                               application_token VARCHAR(255),
                                               PRIMARY KEY (ID))`);
 
-    await dbQuery.executeQuery(`CREATE TABLE user_names_to_tests (user_id BIGSERIAL REFERENCES users(id) ON DELETE CASCADE,
-                                                                         test_id BIGSERIAL REFERENCES tests(id) ON DELETE CASCADE,
-                                                                         name VARCHAR(255),
-                                                                         PRIMARY KEY (user_id, test_id))`);
+    await dbQuery.executeQuery(`CREATE TABLE user_names_to_tests 
+                                          (user_id BIGSERIAL REFERENCES users(id) ON DELETE CASCADE,
+                                           test_id BIGSERIAL REFERENCES tests(id) ON DELETE CASCADE,
+                                           name VARCHAR(255),
+                                           PRIMARY KEY (user_id, test_id))`);
 
     await dbQuery.executeQuery(`CREATE TABLE user_answers (id BIGSERIAL NOT NULL,
                                               question_id BIGSERIAL REFERENCES questions(id) ON DELETE CASCADE,

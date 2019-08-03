@@ -18,7 +18,8 @@ const init = async () => {
     logger.info('Create user and database...');
     await dbQuery.executeQuery(`CREATE DATABASE "${dbConfig.createdDatabaseName}"`);
     await dbQuery.executeQuery(`CREATE USER ${dbConfig.createdUserName} WITH ENCRYPTED PASSWORD 'test'`);
-    await dbQuery.executeQuery(`GRANT ALL PRIVILEGES ON DATABASE ${dbConfig.createdDatabaseName} to ${dbConfig.createdUserName}`);
+    await dbQuery.executeQuery(`GRANT ALL PRIVILEGES ON DATABASE ${dbConfig.createdDatabaseName} to 
+                                                                                ${dbConfig.createdUserName}`);
     return logger.info('User and database created');
   } catch (err) {
     logger.error(`An error occurred while creating database or user: ${err}`);

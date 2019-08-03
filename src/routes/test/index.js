@@ -1,5 +1,3 @@
-const url = require('url');
-
 const router = require('../../utils/router');
 const responder = require('../../utils/responder');
 const checkToken = require('../../middlewares/checkToken');

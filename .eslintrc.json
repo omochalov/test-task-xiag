@@ -19,6 +19,10 @@
         "consistent-return": "off",
         "no-shadow": "off",
         "no-restricted-syntax": "off",
-        "no-await-in-loop": "off"
+        "no-await-in-loop": "off",
+        "no-continue": "off",
+        "max-len": ["error", {
+            "code": 120
+        }]
     }
 }

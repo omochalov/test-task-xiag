@@ -66,12 +66,15 @@ const getResultsOfQuestionById = async (id, questionId) => {
                                                     LEFT JOIN tests as t ON t.id = q.test_id
                                                     LEFT JOIN user_answers as ua ON q.id = ua.question_id
                                                     LEFT JOIN possible_answers as pa ON pa.id = ua.answer_id
-                                                    LEFT JOIN user_names_to_tests as un ON un.test_id = t.id AND ua.user_id = un.user_id
+                                                    LEFT JOIN user_names_to_tests as un ON un.test_id = t.id 
+                                                                                 AND ua.user_id = un.user_id
                                                     WHERE q.test_id = $1::bigint AND q.id = $2::bigint
                                                     ORDER BY un.name, un.user_id`, [id, questionId]);
   result = result.rows;
 
-  let possibleAnswers = await dbQuery.executeQuery(`SELECT q.text as "questionName", pa.id as "answerId", pa.text as "answerText"
+  let possibleAnswers = await dbQuery.executeQuery(`SELECT q.text as "questionName",
+                                                                 pa.id as "answerId", 
+                                                                 pa.text as "answerText"
                                                             FROM questions as q
                                                             LEFT JOIN possible_answers as pa ON pa.question_id = q.id
                                                             WHERE q.test_id = $1::bigint AND q.id = $2::bigint
@@ -105,22 +108,26 @@ const create = async (questions) => {
   const testId = result.rows[0].id;
 
   for (const questionName in questions) {
-    if ({}.hasOwnProperty.call(questions, questionName)) {
-      const result = await dbQuery.executeQuery('INSERT INTO questions VALUES (DEFAULT, $1::bigint, $2::text) RETURNING ID', [testId, questionName]);
-      const questionId = result.rows[0].id;
+    if (!{}.hasOwnProperty.call(questions, questionName)) continue;
+    const result = await dbQuery
+      .executeQuery('INSERT INTO questions VALUES (DEFAULT, $1::bigint, $2::text) RETURNING ID',
+        [testId, questionName]);
+    const questionId = result.rows[0].id;
 
-      const answers = questions[questionName];
-      await Promise.all(
-        answers.map(a => dbQuery.executeQuery('INSERT INTO possible_answers VALUES (DEFAULT, $1::bigint, $2::text) RETURNING ID', [questionId, a])),
-      );
-    }
+    const answers = questions[questionName];
+    await Promise.all(
+      answers.map(a => dbQuery
+        .executeQuery('INSERT INTO possible_answers VALUES (DEFAULT, $1::bigint, $2::text) RETURNING ID',
+          [questionId, a])),
+    );
   }
 
   return findById(testId);
 };
 
 const saveAnswers = async (testId, userId, userName, answers) => {
-  await dbQuery.executeQuery('INSERT INTO user_names_to_tests VALUES ($1::bigint, $2::bigint, $3::text)', [userId, testId, userName]);
+  await dbQuery.executeQuery('INSERT INTO user_names_to_tests VALUES ($1::bigint, $2::bigint, $3::text)',
+    [userId, testId, userName]);
 
   const promises = [];
   answers.forEach((answer) => {
