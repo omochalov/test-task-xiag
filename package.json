@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/omochalov/test-task-xiag#readme",
   "dependencies": {
-    "config": "^3.2.2",
+    "config": "^3.3.8",
     "js-logger": "^1.6.0",
     "pg": "^7.12.0",
     "randomstring": "^1.1.5",
